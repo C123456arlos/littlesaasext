@@ -52,11 +52,19 @@ input {
     margin-bottom: 4px;
 }
 
+#delete {
+    background: white;
+    color: green;
+    padding: 10px 20px;
+    border: 1px solid green;
+    font-weight: bold;
+}
+
 button {
     background: green;
     color: white;
     padding: 10px 20px;
-    border: none;
+    border: 1px solid green;
     font-weight: bold;
 }
 

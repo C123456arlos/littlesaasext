@@ -25,33 +25,76 @@
 
 
 let leads = []
+let oldLeads = []
+
+// leads = JSON.stringify(leads)
+// leads = JSON.parse(leads)
+// leads.push('www.lead2.com')
+// leads = JSON.stringify(leads)
+// console.log(typeof leads)
+// leads = JSON.parse(leads)
+// leads.push("www.lead.com")
+
 const inputElement = document.getElementById('inputElement')
 const inputButton = document.getElementById('inputButton')
 const unordered = document.getElementById('unordered')
-console.log(unordered)
-inputButton.addEventListener('click', function () {
-    leads.push(inputElement.value)
-    renderLeads()
-    inputElement.value = ''
+
+// localStorage.setItem("leads", "name")
+// let name = localStorage.getItem("leads")
+// console.log(name)
+// localStorage.clear()
+// console.log(localStorage.getItem('leads'))
+// console.log(unordered)
+
+// localStorage.clear()
+const deleteButton = document.getElementById('delete')
+const leadsFromLocalStorage = JSON.parse(localStorage.getItem('leads'))
+console.log(leadsFromLocalStorage)
+const tabButton = document.getElementById('tab')
+if (leadsFromLocalStorage) {
+    leads = leadsFromLocalStorage
+    render(leads)
+}
+const tabs = [{ url: 'www.google.com' }]
+tabButton.addEventListener('click', function () {
+    // chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+    // })
+    // console.log(tabs[0].url)
+    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        console.log(tabs)
+        leads.push(tabs[0].url)
+        localStorage.setItem('leads', JSON.stringify(leads))
+        render(leads)
+    })
+    // leads.push(tabs[0].url)
+    // localStorage.setItem('leads', JSON.stringify(leads))
+    // render(leads)
 })
-function renderLeads() {
+function render(leadsA) {
     let listItems = ''
-    for (let i = 0; i < leads.length; i++) {
+    for (let i = 0; i < leadsA.length; i++) {
         // listItems += "<li>< a target = '_blank' href = '" + leads[i] + "' > " + leads[i] + '</li>'
         listItems += `<li>
-        <a target = '_blank' href = '${leads[i]}'>${leads[i]}
+        <a target = '_blank' href = '${leadsA[i]}'>${leadsA[i]}
         </a>
         </li>`
         console.log(listItems)
     }
     unordered.innerHTML = listItems
 }
-
-
-
-
-
-
+deleteButton.addEventListener('dblclick', function () {
+    console.log('double')
+    localStorage.clear()
+    leads = []
+    render(leads)
+})
+inputButton.addEventListener('click', function () {
+    leads.push(inputElement.value)
+    inputElement.value = ''
+    localStorage.setItem("leads", JSON.stringify(leads))
+    render(leads)
+    console.log(localStorage.getItem('leads'))
+})
 
 
 
@@ -81,3 +124,7 @@ function renderLeads() {
 //     console.log(`numTwoVal is of type ${typeof numTwoVal} with value of ${numTwoVal}`)
 //     resultText.innerText = `${numOneVal}+${numTwoVal}= ${numOneVal + numTwoVal}`
 // })
+
+
+
+
